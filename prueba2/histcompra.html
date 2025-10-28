@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Historial de Compra - LUMEN</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="pantalla-catalogo">
+    <header class="header">
+      <div class="logo-header">
+        <img src="gancho-de-ropa.png" alt="Logo">
+        <div class="titulo-lumen">
+          <strong>LUMEN</strong><br>
+          <span>ROPA CON ESTILO</span>
+        </div>
+      </div>
+      <div class="menu-icon" id="menuToggle">☰</div>
+    </header>
+
+    <!-- Menú desplegable -->
+    <nav class="menu-desplegable" id="menu">
+      <ul>
+        <li><a href="catalogo.html">Inicio</a></li> <!--Redireccionamiento al inicio/catalogo-->
+        <li><a href="carrito.html">Carrito de compra</a></li> <!--Redireccionamiento a carrito de compra-->
+        <li><a href="histcompra.html">Historial de compra</a></li> <!--Redireccionamiento al historial de compra-->
+        <li><a href="perfil.html">Perfil</a></li> <!--Redireccionamiento a Perfil-->
+        <li><a href="index.html">Cerrar sesión</a></li> <!--Redireccionamiento a Login-->
+      </ul>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="historial-contenedor">
+        <h2>Historial de Compras</h2>
+        <div id="historialContenedor" class="historial-lista"></div>
+    </main>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const menu = document.getElementById("menu");
+    menuToggle.addEventListener("click", () => {
+      menu.classList.toggle("visible");
+    });
+
+    const contenedor = document.getElementById("historialContenedor");
+    const historial = JSON.parse(localStorage.getItem("historialCompras")) || [];
+
+if (historial.length === 0) {
+  contenedor.innerHTML = '<p class="mensaje-vacio">No hay compras registradas.</p>';
+} else {
+  historial.forEach((compra, i) => {
+    const card = document.createElement("div");
+    card.classList.add("historial-card");
+    card.innerHTML = `
+      <h3>Compra #${i + 1}</h3>
+      <ul>
+        ${compra.productos.map(p => `
+          <li>${p.nombre} x${p.cantidad} - $${p.precio * p.cantidad}</li>
+        `).join('')}
+      </ul>
+      <strong>Total: $${compra.total}</strong>
+      <p>${compra.fecha}</p>
+    `;
+    contenedor.appendChild(card);
+  });
+}
+  </script>
+</body>
+</html>
